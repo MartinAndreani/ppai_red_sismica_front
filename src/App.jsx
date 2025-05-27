@@ -1,13 +1,17 @@
-
+import { Routes, Route } from 'react-router-dom';
+import NavBar from '../src/components/NavBar/NavBar.jsx';
+import Inicio from './pages/Inicio/Inicio.jsx';
+import RegistrarResultado from './pages/RegistrarResultado/RegistrarResultado';
 
 function App() {
-
-
     return (
-        <div className="bg-red-400 h-screen flex justify-center items-start">
-            <img src="../src/assets/sismo.png" alt="logo" className="flex justify-center items-center"/>
-
-        </div>
+        <>
+            <NavBar />
+            <Routes>
+                <Route path="/" element={<Inicio />} />
+                <Route path="/registrar" element={<RegistrarResultado />} />
+            </Routes>
+        </>
     );
 }
 
