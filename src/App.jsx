@@ -1,6 +1,11 @@
 import ListaEventosSismicos from './components/EventosSismicos/ListaEventosSismicos'; 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import  Link  from "react-router-dom";
+import { Routes, Route } from 'react-router-dom';
+import NavBar from '../src/components/NavBar/NavBar.jsx';
+import Inicio from './pages/Inicio/Inicio.jsx';
+import RegistrarResultado from './pages/RegistrarResultado/RegistrarResultado';
+
 function App() {
     // DATOS GENERICOS
   const seismicData = [
@@ -81,6 +86,15 @@ function App() {
         </BrowserRouter>
     </div>
   );
+    return (
+        <>
+            <NavBar />
+            <Routes>
+                <Route path="/" element={<Inicio />} />
+                <Route path="/registrar" element={<RegistrarResultado />} />
+            </Routes>
+        </>
+    );
 }
 
 export default App;
