@@ -8,9 +8,13 @@ const NavBar = () => {
             <img src={logo} alt="Logo" className="max-h-20" />
 
             <div className="absolute left-1/2 transform -translate-x-1/2">
-                <ul className="flex flex-row gap-20 text-xl text-red-500 font-sans ">
-                    <li><Link to="/">Inicio</Link></li>
-                    <li><Link to="/registrar">Registrar Resultado</Link></li>
+                <ul className="flex flex-row gap-20 text-xl text-red-500 font-sans">
+                    <li>
+                        <Link to="/" className="hover:text-red-700">Inicio</Link>
+                    </li>
+                    <li>
+                        <Link to="/eventos" className="hover:text-red-700">Eventos sísmicos</Link>
+                    </li>
                 </ul>
             </div>
         </div>

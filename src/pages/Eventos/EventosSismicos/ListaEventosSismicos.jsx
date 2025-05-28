@@ -13,7 +13,7 @@ const ListaEventosSismicos = ({ events }) => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 mt-35">
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Eventos Sísmicos Recientes</h1>
 
       {events && events.length > 0 ? (
