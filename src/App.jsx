@@ -1,7 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import NavBar from '../src/components/NavBar/NavBar.jsx';
 import Inicio from './pages/Inicio/Inicio.jsx';
-import RegistrarResultado from './pages/RegistrarResultado/RegistrarResultado';
+import ListaEventosSismicos from './pages/Eventos/EventosSismicos/ListaEventosSismicos.jsx';
+import {seismicData} from "./commons/Datos.js";
 
 function App() {
     return (
@@ -9,7 +10,8 @@ function App() {
             <NavBar />
             <Routes>
                 <Route path="/" element={<Inicio />} />
-                <Route path="/registrar" element={<RegistrarResultado />} />
+                <Route path="/eventos" element={<ListaEventosSismicos events={seismicData} />} />
+
             </Routes>
         </>
     );
