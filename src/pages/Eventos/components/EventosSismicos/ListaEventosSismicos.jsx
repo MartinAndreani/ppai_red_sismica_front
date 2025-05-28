@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import EventoSismicoCard from './EventoSismicoCard'; // Import the new card component
+import EventoSismicoCard from './EventoSismicoCard.jsx'; // Import the new card component
 
 const ListaEventosSismicos = ({ events }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
