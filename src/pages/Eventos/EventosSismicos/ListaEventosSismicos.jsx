@@ -1,30 +1,38 @@
-import { useState, useEffect } from 'react';
-import EventoSismicoCard from './EventoSismicoCard';
+import { useState, useEffect } from "react";
+import EventoSismicoCard from "./EventoSismicoCard";
 
 const ListaEventosSismicos = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/eventos')
-      .then(res => res.json())
-      .then(data => {
-        // Si el backend retorna un string JSON, parsear dos veces
-        const eventos = typeof data === 'string' ? JSON.parse(data) : data;
+    fetch("http://localhost:8000/api/eventos")
+      .then((res) => res.json())
+      .then((data) => {
+        const eventos = typeof data === "string" ? JSON.parse(data) : data;
         setEvents(eventos);
         setLoading(false);
       })
-      .catch(err => {
-        setError('Error al cargar los eventos sísmicos');
+      .catch((err) => {
+        setError("Error al cargar los eventos sísmicos");
         setLoading(false);
       });
   }, []);
 
   const handleSelectClick = (event) => {
-    setSelectedEvent(event);
-  };
+  fetch(`http://localhost:8000/api/eventos/${event.id}/datos-restantes`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Datos recibidos del backend:", data);
+      const datosRestantes = Array.isArray(data) ? data[0] : data;
+      setSelectedEvent({ ...event, ...datosRestantes });
+    })
+    .catch((err) => {
+      setError("Error al obtener los datos completos del evento");
+    });
+};
 
   const handleCloseCard = () => {
     setSelectedEvent(null);
@@ -41,9 +49,11 @@ const ListaEventosSismicos = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Eventos Sísmicos Recientes</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
+          Eventos Sísmicos Recientes
+        </h1>
 
-        {events && events.length > 0 ? (
+        {events.length > 0 ? (
           <div className="overflow-x-auto shadow-lg rounded-lg">
             <table className="min-w-full bg-white">
               <thead className="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
@@ -60,7 +70,7 @@ const ListaEventosSismicos = () => {
                   <tr
                     key={index}
                     className={`border-b border-gray-200 hover:bg-gray-100 ${
-                      selectedEvent === event ? 'bg-blue-100' : ''
+                      selectedEvent?.id === event.id ? "bg-blue-100" : ""
                     }`}
                   >
                     <td className="py-3 px-6 text-left whitespace-nowrap">
@@ -87,7 +97,9 @@ const ListaEventosSismicos = () => {
             </table>
           </div>
         ) : (
-          <p className="text-center text-gray-600 mt-8">No hay eventos sísmicos para mostrar.</p>
+          <p className="text-center text-gray-600 mt-8">
+            No hay eventos sísmicos para mostrar.
+          </p>
         )}
 
         {selectedEvent && (

@@ -33,39 +33,32 @@ const EventoSismicoCard = ({ event, onClose }) => {
         </button>
         <h2 className="text-2xl font-bold mb-4 text-blue-700">Detalles del Evento Sísmico</h2>
 
+        <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+        >
+          &times;
+        </button>
+        <h2 className="text-2xl font-bold mb-4 text-blue-700">Detalles del Evento Sísmico</h2>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
             <h3 className="text-xl font-semibold mb-3 text-gray-700">Información Principal</h3>
-            <p className="mb-2">
-              <span className="font-medium">Fecha y Hora:</span>{' '}
-              {new Date(event.fechaHoraOcurrencia).toLocaleString()}
-            </p>
-            <p className="mb-2">
-              <span className="font-medium">Magnitud:</span> {event.valorMagnitud}
-            </p>
-            <p className="mb-2">
-              <span className="font-medium">Epicentro:</span> ({event.latitudEpicentro},{' '}
-              {event.longitudEpicentro})
-            </p>
-            <p className="mb-2">
-              <span className="font-medium">Hipocentro:</span> ({event.latitudHipocentro},{' '}
-              {event.longitudHipocentro})
-            </p>
-            <p className="mb-2">
-              <span className="font-medium">Alcance:</span> {event.alcanceSismo}
-            </p>
-            <p className="mb-2">
-              <span className="font-medium">Clasificación:</span> {event.clasificacionSismo}
-            </p>
-            <p className="mb-2">
-              <span className="font-medium">Origen de Generación:</span> {event.origenDeGeneracion}
-            </p>
+            <p className="mb-2"><span className="font-medium">Fecha y Hora:</span> {new Date(event.fechaHora).toLocaleString()}</p>
+            <p className="mb-2"><span className="font-medium">Magnitud:</span> {event.magnitud}</p>
+            <p className="mb-2"><span className="font-medium">Epicentro:</span> ({event.latitudEpicentro}, {event.longitudEpicentro})</p>
+            <p className="mb-2"><span className="font-medium">Hipocentro:</span> ({event.latitudHipocentro}, {event.longitudHipocentro})</p>
+            <p className="mb-2"><span className="font-medium">Alcance:</span> {event.alcance}</p>
+            <p className="mb-2"><span className="font-medium">Clasificación:</span> {event.clasificacion?.nombre} ({event.clasificacion?.profundidadDesde} - {event.clasificacion?.profundidadHasta} km)</p>
+            <p className="mb-2"><span className="font-medium">Origen de Generación:</span> {event.origen}</p>
           </div>
 
           <div className="flex justify-center items-center">
             <img src={IMG_GENERICA} alt="Generic Seismic Event" className="rounded-lg shadow-md max-w-full h-auto" />
           </div>
         </div>
+      </div>
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold mb-3 text-gray-700">Series Temporales por Estación</h3>
