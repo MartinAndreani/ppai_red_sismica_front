@@ -22,17 +22,24 @@ const ListaEventosSismicos = () => {
   }, []);
 
   const handleSelectClick = (event) => {
-  fetch(`http://localhost:8000/api/eventos/${event.id}/datos-restantes`)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Datos recibidos del backend:", data);
-      const datosRestantes = Array.isArray(data) ? data[0] : data;
-      setSelectedEvent({ ...event, ...datosRestantes });
-    })
-    .catch((err) => {
-      setError("Error al obtener los datos completos del evento");
-    });
-};
+    // Ahora hacemos una sola petición al nuevo endpoint de detalles
+    fetch(`http://localhost:8000/api/eventos/${event.id}/detalles`)
+      .then((res) => res.json())
+      .then((data) => {
+        // 'data' ahora contiene directamente 'datos_restantes' y 'series_temporales'
+        // Combina los datos principales del evento con los detalles obtenidos del backend
+        setSelectedEvent({ 
+          ...event, 
+          // Es importante acceder a los arrays, y si son un array de un solo elemento, tomar el primero
+          ...(Array.isArray(data.datos_restantes) ? data.datos_restantes[0] : data.datos_restantes), 
+          seriesTemporales: data.series_temporales 
+        });
+      })
+      .catch((err) => {
+        setError("Error al obtener los detalles completos del evento");
+        console.error("Error al obtener detalles del evento:", err);
+      });
+  };
 
   const handleCloseCard = () => {
     setSelectedEvent(null);

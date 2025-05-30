@@ -11,7 +11,7 @@ const EventoSismicoCard = ({ event, onClose }) => {
 
   const handleConfirmAction = () => {
     if (selectedAction) {
-      console.log(`Acción confirmada para el evento ${event.fechaHoraOcurrencia}: ${selectedAction}`);
+      console.log(`Acción confirmada para el evento ${event.fechaHora}: ${selectedAction}`); 
       alert(`Acción "${selectedAction}" confirmada para el evento.`);
     } else {
       alert('Por favor, selecciona una acción primero.');
@@ -25,15 +25,6 @@ const EventoSismicoCard = ({ event, onClose }) => {
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold"
-        >
-          &times;
-        </button>
-        <h2 className="text-2xl font-bold mb-4 text-blue-700">Detalles del Evento Sísmico</h2>
-
-        <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold"
@@ -58,36 +49,44 @@ const EventoSismicoCard = ({ event, onClose }) => {
             <img src={IMG_GENERICA} alt="Generic Seismic Event" className="rounded-lg shadow-md max-w-full h-auto" />
           </div>
         </div>
-      </div>
 
+        {/* Sección de Series Temporales */}
         <div className="mb-6">
           <h3 className="text-xl font-semibold mb-3 text-gray-700">Series Temporales por Estación</h3>
-          {event.serieTemporal && event.serieTemporal.length > 0 ? (
-            event.serieTemporal.map((serie, serieIndex) => (
+          {event.seriesTemporales && event.seriesTemporales.length > 0 ? (
+            event.seriesTemporales.map((serie, serieIndex) => (
               <div key={serieIndex} className="bg-gray-50 p-4 rounded-md shadow-sm mb-4">
                 <h4 className="font-medium text-lg mb-2 text-indigo-700">
-                  Estación: {serie.estacionSismologica}
+                  Estación: {serie.estacionSismologica} (Sismógrafo: {serie.sismografo})
                 </h4>
+                <p className="mb-2 text-sm text-gray-600">Fecha Inicio Muestras: {new Date(serie.fechaHoraInicio).toLocaleString()}</p>
+                
                 {serie.muestras && serie.muestras.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="min-w-full text-sm bg-white border border-gray-200">
                       <thead className="bg-gray-100">
                         <tr>
-                          <th className="py-2 px-4 border-b text-left">Instante</th>
-                          <th className="py-2 px-4 border-b text-left">Velocidad Onda (m/s)</th>
-                          <th className="py-2 px-4 border-b text-left">Frecuencia Onda (Hz)</th>
-                          <th className="py-2 px-4 border-b text-left">Longitud Onda (m)</th>
+                          <th className="py-2 px-4 border-b text-left">Fecha/Hora Muestra</th>
+                          {/* Encuentra todas las denominaciones de datos únicos para los encabezados de la tabla */}
+                          {serie.muestras[0].detalles.map((detalle, detIndex) => (
+                              <th key={detIndex} className="py-2 px-4 border-b text-left">
+                                {detalle.denominacion} ({detalle.unidadMedida})
+                              </th>
+                          ))}
                         </tr>
                       </thead>
                       <tbody>
                         {serie.muestras.map((muestra, muestraIndex) => (
                           <tr key={muestraIndex} className="border-b border-gray-100 hover:bg-gray-50">
                             <td className="py-2 px-4">
-                              {new Date(muestra.instanteTiempo).toLocaleTimeString()}
+                              {new Date(muestra.fechaHora).toLocaleTimeString()}
                             </td>
-                            <td className="py-2 px-4">{muestra.velocidadOnda}</td>
-                            <td className="py-2 px-4">{muestra.frecuenciaOnda}</td>
-                            <td className="py-2 px-4">{muestra.longitudOnda}</td>
+                            {/* Renderizar los valores de los detalles de la muestra */}
+                            {muestra.detalles.map((detalle, detIndex) => (
+                                <td key={detIndex} className="py-2 px-4">
+                                  {detalle.valor}
+                                </td>
+                            ))}
                           </tr>
                         ))}
                       </tbody>
