@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import {API_URL} from "../../../config.js";
 const IMG_GENERICA = 'https://images.pagina12.com.ar/styles/focal_3_2_470x313/public/2025-04/932550-mdz_0.jpg?h=99d542d8&itok=Z0H8lITH';
 
 const EventoSismicoCard = ({ event, onClose }) => {
@@ -8,13 +8,30 @@ const EventoSismicoCard = ({ event, onClose }) => {
   const handleActionChange = (e) => {
     setSelectedAction(e.target.value);
   };
+  console.log(event.id)
 
-  const handleConfirmAction = () => {
-    if (selectedAction) {
-      console.log(`Acción confirmada para el evento ${event.fechaHora}: ${selectedAction}`); 
-      alert(`Acción "${selectedAction}" confirmada para el evento.`);
-    } else {
+  const handleConfirmAction = async () => {
+    if (!selectedAction) {
       alert('Por favor, selecciona una acción primero.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/eventos/${event.id}/cambiar-estado?estado=${encodeURIComponent(selectedAction)}`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al cambiar el estado del evento');
+      }
+
+      const data = await response.json();
+      console.log(data.mensaje);
+      alert(`Acción "${selectedAction}" confirmada para el evento.`);
+      onClose(); // opcional: cerrar el modal al confirmar
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Hubo un problema al ejecutar la acción.');
     }
   };
 
