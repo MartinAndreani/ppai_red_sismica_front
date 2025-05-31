@@ -10,13 +10,29 @@ const EventoSismicoCard = ({ event, onClose }) => {
   };
 
   const handleConfirmAction = () => {
-    if (selectedAction) {
-      console.log(`Acción confirmada para el evento ${event.fechaHora}: ${selectedAction}`); 
-      alert(`Acción "${selectedAction}" confirmada para el evento.`);
-    } else {
-      alert('Por favor, selecciona una acción primero.');
-    }
-  };
+  if (selectedAction) {
+    fetch('http://localhost:8000/api/eventos/accion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: event.id,
+        estado: selectedAction,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        alert(data.mensaje || `Acción "${selectedAction}" confirmada para el evento.`);
+      })
+      .catch((err) => {
+        alert('Error al enviar la acción al backend');
+        console.error(err);
+      });
+  } else {
+    alert('Por favor, selecciona una acción primero.');
+  }
+};
 
   if (!event) {
     return null; 
