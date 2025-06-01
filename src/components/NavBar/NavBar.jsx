@@ -13,7 +13,10 @@ const NavBar = () => {
                         <Link to="/" className="hover:text-red-700">Inicio</Link>
                     </li>
                     <li>
-                        <Link to="/eventos" className="hover:text-red-700">Eventos sísmicos</Link>
+                        <Link to="/eventos" className="hover:text-red-700">Eventos sísmicos no revisados</Link>
+                    </li>
+                    <li>
+                        <Link to="/eventos-todos" className="hover:text-red-700">Eventos sísmicos</Link>
                     </li>
                 </ul>
             </div>
