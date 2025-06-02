@@ -10,30 +10,30 @@ const EventoSismicoCard = ({ event, onClose }) => {
   };
   console.log(event.id)
 
-  const handleConfirmAction = async () => {
-    if (!selectedAction) {
-      alert('Por favor, selecciona una acción primero.');
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_URL}/api/eventos/${event.id}/cambiar-estado?estado=${encodeURIComponent(selectedAction)}`, {
-        method: 'POST',
+  const handleConfirmAction = () => {
+  if (selectedAction) {
+    fetch('http://localhost:8000/api/eventos/accion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: event.id,
+        estado: selectedAction,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        alert(data.mensaje || `Acción "${selectedAction}" confirmada para el evento.`);
+      })
+      .catch((err) => {
+        alert('Error al enviar la acción al backend');
+        console.error(err);
       });
-
-      if (!response.ok) {
-        throw new Error('Error al cambiar el estado del evento');
-      }
-
-      const data = await response.json();
-      console.log(data.mensaje);
-      alert(`Acción "${selectedAction}" confirmada para el evento.`);
-      onClose(); // opcional: cerrar el modal al confirmar
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Hubo un problema al ejecutar la acción.');
-    }
-  };
+  } else {
+    alert('Por favor, selecciona una acción primero.');
+  }
+};
 
   if (!event) {
     return null; 

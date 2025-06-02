@@ -22,15 +22,11 @@ const ListaEventosSismicos = () => {
   }, []);
 
   const handleSelectClick = (event) => {
-    // Ahora hacemos una sola petición al nuevo endpoint de detalles
     fetch(`http://localhost:8000/api/eventos/${event.id}/detalles`)
       .then((res) => res.json())
       .then((data) => {
-        // 'data' ahora contiene directamente 'datos_restantes' y 'series_temporales'
-        // Combina los datos principales del evento con los detalles obtenidos del backend
         setSelectedEvent({ 
           ...event, 
-          // Es importante acceder a los arrays, y si son un array de un solo elemento, tomar el primero
           ...(Array.isArray(data.datos_restantes) ? data.datos_restantes[0] : data.datos_restantes), 
           seriesTemporales: data.series_temporales 
         });
